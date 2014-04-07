@@ -18,5 +18,14 @@
     "underscore": "~1.6.0",
     "async": "~0.6.2",
     "github": "~0.1.15"
+  },
+  "bugs": {
+    "url": "https://github.com/sakatam/hubot-reviewer-lotto/issues"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.7.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
