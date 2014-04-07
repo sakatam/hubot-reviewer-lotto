@@ -1,0 +1,22 @@
+{
+  "name": "hubot-reviewer-lottery",
+  "version": "0.0.0",
+  "author": "sakatam",
+  "description": "A reviewer lottery script for Hubot",
+  "keywords": [
+    "hubot",
+    "hubot-scripts"
+  ],
+  "license": "MIT",
+  "main": "index.coffee",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sakatam/hubot-reviewer-lottery.git"
+  },
+  "dependencies": {
+    "coffee-script": "~1.7",
+    "underscore": "~1.6.0",
+    "async": "~0.6.2",
+    "github": "~0.1.15"
+  }
+}
