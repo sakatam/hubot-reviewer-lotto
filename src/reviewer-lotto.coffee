@@ -68,8 +68,6 @@ module.exports = (robot) ->
         if assignee?
           reviewers = reviewers.filter (r) -> r.login != assignee.login
         ctx['reviewer'] = _.sample reviewers
-        # XXX
-        ctx['reviewer'] = {login: "sakatam"}
         cb null, ctx
 
       (ctx, cb) ->
