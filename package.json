@@ -1,5 +1,5 @@
 {
-  "name": "hubot-reviewer-lottery",
+  "name": "hubot-reviewer-lotto",
   "version": "0.0.1",
   "author": "sakatam",
   "description": "A reviewer lottery script for Hubot",
@@ -11,7 +11,7 @@
   "main": "index.coffee",
   "repository": {
     "type": "git",
-    "url": "git://github.com/sakatam/hubot-reviewer-lottery.git"
+    "url": "git://github.com/sakatam/hubot-reviewer-lotto.git"
   },
   "dependencies": {
     "coffee-script": "~1.7",
