@@ -40,9 +40,10 @@ module.exports = (robot) ->
     msgs.push "#{login}, #{count}" for login, count of stats
     msg.reply msgs.join "\n"
 
-  robot.respond /reviewer for ([\w-\.]+) (\d+)$/i, (msg) ->
+  robot.respond /reviewer for ([\w-\.]+) (\d+)( polite)?$/i, (msg) ->
     repo = msg.match[1]
     pr   = msg.match[2]
+    polite = msg.match[3]?
     prParams =
       user: ghOrg
       repo: repo
@@ -83,15 +84,15 @@ module.exports = (robot) ->
       (ctx, cb) ->
         # post a comment
         {reviewer} = ctx
-        params = _.extend { body: "@#{reviewer.login} please review this :bow:" }, prParams
+        body = "@#{reviewer.login} please review this" + if polite then " :bow::bow::bow::bow:" else "."
+        params = _.extend { body }, prParams
         gh.issues.createComment params, (err, res) -> cb err, ctx
 
       (ctx, cb) ->
         # change assignee
         {reviewer} = ctx
         params = _.extend { assignee: reviewer.login }, prParams
-        gh.issues.edit params, (err, res) ->
-          cb err, ctx
+        gh.issues.edit params, (err, res) -> cb err, ctx
 
       (ctx, cb) ->
         {reviewer, issue} = ctx
