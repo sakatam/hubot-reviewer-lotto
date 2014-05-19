@@ -52,6 +52,15 @@ module.exports = (robot) ->
     gh = new GitHubApi version: "3.0.0"
     gh.authenticate {type: "oauth", token: ghToken}
 
+    # mock api if debug mode
+    if process.env.HUBOT_REVIEWER_LOTTO_DEBUG in ["1", "true"]
+      gh.issues.createComment = (params, cb) ->
+        console.log "GitHubApi - createComment is called", params
+        cb null
+      gh.issues.edit = (params, cb) ->
+        console.log "GitHubApi - edit is called", params
+        cb null
+
     async.waterfall [
       (cb) ->
         # get team members
