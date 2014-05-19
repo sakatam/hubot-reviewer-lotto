@@ -9,6 +9,7 @@
 #
 # Commands:
 #   hubot reviewer for <repo> <pull> - assigns random reviewer for pull request
+#   hubot reviewer show stats - proves the lotto has no bias
 #
 # Author:
 #   sakatam
@@ -22,6 +23,8 @@ module.exports = (robot) ->
   ghOrg         = process.env.HUBOT_GITHUB_ORG
   ghReviwerTeam = process.env.HUBOT_GITHUB_REVIEWER_TEAM
 
+  STATS_KEY     = 'reviewer-lotto-stats'
+
   if !ghToken? or !ghOrg? or !ghReviwerTeam?
     return robot.logger.error """
       reviewer-lottery is not loaded due to missing configuration!
@@ -30,6 +33,12 @@ module.exports = (robot) ->
       HUBOT_GITHUB_ORG: #{ghOrg}
       HUBOT_GITHUB_REVIEWER_TEAM: #{ghReviwerTeam}
     """
+
+  robot.respond /reviewer show stats$/i, (msg) ->
+    stats = robot.brain.get STATS_KEY
+    msgs = ["login, num assigned"]
+    msgs.push "#{login}, #{count}" for login, count of stats
+    msg.reply msgs.join "\n"
 
   robot.respond /reviewer for ([\w-\.]+) (\d+)$/i, (msg) ->
     repo = msg.match[1]
@@ -56,6 +65,7 @@ module.exports = (robot) ->
         # check if pull req exists
         gh.pullRequests.get prParams, (err, res) ->
           return cb "error on getting pull request: #{err.toString()}" if err?
+          ctx['issue'] = res
           ctx['creator'] = res.user
           ctx['assignee'] = res.assignee
           cb null, ctx
@@ -81,12 +91,18 @@ module.exports = (robot) ->
         {reviewer} = ctx
         params = _.extend { assignee: reviewer.login }, prParams
         gh.issues.edit params, (err, res) ->
-          ctx['issue'] = res
           cb err, ctx
 
       (ctx, cb) ->
         {reviewer, issue} = ctx
         msg.reply "#{reviewer.login} has been assigned for #{issue.html_url} as a reviewer"
+
+        # update stats
+        stats = (robot.brain.get STATS_KEY) or {}
+        stats[reviewer.login] or= 0
+        stats[reviewer.login]++
+        robot.brain.set STATS_KEY, stats
+
         cb null, ctx
 
     ], (err, res) ->
