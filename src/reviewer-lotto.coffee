@@ -22,6 +22,7 @@ module.exports = (robot) ->
   ghToken       = process.env.HUBOT_GITHUB_TOKEN
   ghOrg         = process.env.HUBOT_GITHUB_ORG
   ghReviwerTeam = process.env.HUBOT_GITHUB_REVIEWER_TEAM
+  ghWithAvatar  = process.env.HUBOT_GITHUB_WITH_AVATAR
 
   STATS_KEY     = 'reviewer-lotto-stats'
 
@@ -105,7 +106,11 @@ module.exports = (robot) ->
 
       (ctx, cb) ->
         {reviewer, issue} = ctx
-        msg.reply "#{reviewer.login} has been assigned for #{issue.html_url} as a reviewer"
+        messages = []
+        messages.push "#{reviewer.login} has been assigned for #{issue.html_url} as a reviewer"
+        if ghWithAvatar
+          messages.push reviewer.avatar_url
+        msg.reply messages.join("\n")
 
         # update stats
         stats = (robot.brain.get STATS_KEY) or {}
