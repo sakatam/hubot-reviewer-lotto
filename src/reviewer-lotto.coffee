@@ -109,7 +109,12 @@ module.exports = (robot) ->
         messages = []
         messages.push "#{reviewer.login} has been assigned for #{issue.html_url} as a reviewer"
         if ghWithAvatar
-          messages.push reviewer.avatar_url
+          avatar_url = reviewer.avatar_url
+          if avatar_url.indexOf('#') > -1
+            avatar_url = avatar_url.replace(/#.*/, '#.png')
+          else
+            avatar_url += '#.png'
+          messages.push avatar_url
         msg.reply messages.join("\n")
 
         # update stats
