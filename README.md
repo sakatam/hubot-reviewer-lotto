@@ -16,10 +16,25 @@ members of this organization are candidate reviewers.
 * install this npm package to your hubot repo
     * `npm i --save hubot-reviewer-lotto`
 * add `"hubot-reviewer-lotto"` to your `external-scripts.json`
-* set up the following env vars on heroku
-    * `HUBOT_GITHUB_TOKEN`
-    * `HUBOT_GITHUB_ORG` - name of your github organization
-    * `HUBOT_GITHUB_REVIEWER_TEAM` - the reviewer team id that you have created above
+* set the following env vars on heroku
+  <table>
+      <tr>
+          <th>`HUBOT_GITHUB_TOKEN`</th>
+          <td>required. the access token you created above.</td>
+      </tr>
+      <tr>
+          <th>`HUBOT_GITHUB_ORG`</th>
+          <td>required. name of your github organization.</td>
+      </tr>
+      <tr>
+          <th>`HUBOT_GITHUB_REVIEWER_TEAM`</th>
+          <td>required. the reviewer team id you created above.</td>
+      </tr>
+      <tr>
+          <th>`HUBOT_GITHUB_WITH_AVATAR`</th>
+          <td>optional. assignee's avatar image will be posted if this var is set to "1".</td>
+      </tr>
+  </table>
 
 # usage
 * `hubot reviewer for <repo> <pull>`
