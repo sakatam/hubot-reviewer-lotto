@@ -5,6 +5,8 @@ Hubot assigns a random reviewer for pull request on behalf of you.
 
 ## create a team in your github organization
 
+![image](https://cloud.githubusercontent.com/assets/81522/3102957/76422e2c-e64e-11e3-91ee-7e4075d0f685.png)
+
 members of this organization are candidate reviewers.
 
 
@@ -39,6 +41,17 @@ members of this organization are candidate reviewers.
 # usage
 * `hubot reviewer for <repo> <pull>`
 * e.g. `hubot reviewer for our-webapp 345`
+
+## example
+
+on hipchat
+
+![image](https://cloud.githubusercontent.com/assets/81522/3103001/1085dc68-e64f-11e3-8b17-c8a0741c1b51.png)
+
+on github
+
+![image](https://cloud.githubusercontent.com/assets/81522/3102996/f5d1364c-e64e-11e3-8af7-297c10d92208.png)
+
 
 # get involved
 
