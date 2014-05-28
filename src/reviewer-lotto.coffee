@@ -107,11 +107,10 @@ module.exports = (robot) ->
       (ctx, cb) ->
         {reviewer, issue} = ctx
         messages = []
-        messages.push "#{reviewer.login} has been assigned for #{issue.html_url} as a reviewer"
+        msg.reply "#{reviewer.login} has been assigned for #{issue.html_url} as a reviewer"
         if ghWithAvatar
           # hipchat needs image-ish url to display inline image
-          messages.push "#{reviewer.avatar_url}".replace(/(#.*|$)/, '#.png')
-        msg.reply messages.join("\n")
+          msg.send "#{reviewer.avatar_url}".replace(/(#.*|$)/, '#.png')
 
         # update stats
         stats = (robot.brain.get STATS_KEY) or {}
