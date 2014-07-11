@@ -1,5 +1,5 @@
 # Description:
-#   assigns random reviewer for a pull request
+#   assigns random reviewer for a pull request.
 #
 # Configuration:
 #   HUBOT_GITHUB_TOKEN (required)
@@ -17,14 +17,34 @@
 _         = require "underscore"
 async     = require "async"
 GitHubApi = require "github"
+weighted  = require "weighted"
 
 module.exports = (robot) ->
   ghToken       = process.env.HUBOT_GITHUB_TOKEN
   ghOrg         = process.env.HUBOT_GITHUB_ORG
   ghReviwerTeam = process.env.HUBOT_GITHUB_REVIEWER_TEAM
   ghWithAvatar  = process.env.HUBOT_GITHUB_WITH_AVATAR
+  debug         = process.env.HUBOT_REVIEWER_LOTTO_DEBUG in ["1", "true"]
 
   STATS_KEY     = 'reviewer-lotto-stats'
+
+  # draw lotto - weighted random selection
+  draw = (reviewers, stats = null) ->
+    max = if stats? then (_.max _.map stats, (count) -> count) else 0
+    arms = {}
+    sum = 0
+    for {login} in reviewers
+      weight = Math.exp max - (stats?[login] || 0)
+      arms[login] = weight
+      sum += weight
+    # normalize weights
+    for login, weight of arms
+      arms[login] = if sum > 0 then weight / sum else 1
+    if debug
+      robot.logger.info 'arms: ', arms
+
+    selected = weighted.select arms
+    _.find reviewers, ({login}) -> login == selected
 
   if !ghToken? or !ghOrg? or !ghReviwerTeam?
     return robot.logger.error """
@@ -54,12 +74,12 @@ module.exports = (robot) ->
     gh.authenticate {type: "oauth", token: ghToken}
 
     # mock api if debug mode
-    if process.env.HUBOT_REVIEWER_LOTTO_DEBUG in ["1", "true"]
+    if debug
       gh.issues.createComment = (params, cb) ->
-        console.log "GitHubApi - createComment is called", params
+        robot.logger.info "GitHubApi - createComment is called", params
         cb null
       gh.issues.edit = (params, cb) ->
-        console.log "GitHubApi - edit is called", params
+        robot.logger.info "GitHubApi - edit is called", params
         cb null
 
     async.waterfall [
@@ -88,7 +108,8 @@ module.exports = (robot) ->
         # exclude current assignee from reviewer candidates
         if assignee?
           reviewers = reviewers.filter (r) -> r.login != assignee.login
-        ctx['reviewer'] = _.sample reviewers
+
+        ctx['reviewer'] = draw reviewers, robot.brain.get(STATS_KEY)
         cb null, ctx
 
       (ctx, cb) ->
