@@ -57,8 +57,13 @@ module.exports = (robot) ->
 
   robot.respond /reviewer show stats$/i, (msg) ->
     stats = robot.brain.get STATS_KEY
-    msgs = ["login, num assigned"]
-    msgs.push "#{login}, #{count}" for login, count of stats
+    msgs = ["login, percentage, num assigned"]
+    total = 0
+    for login, count of stats
+      total += count
+    for login, count of stats
+      percentage = Math.floor(count * 100.0 / total)
+      msgs.push "#{login}, #{percentage}%, #{count}"
     msg.reply msgs.join "\n"
 
   robot.respond /reviewer for ([\w-\.]+) (\d+)( polite)?$/i, (msg) ->
