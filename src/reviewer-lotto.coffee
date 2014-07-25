@@ -130,8 +130,10 @@ module.exports = (robot) ->
         messages = []
         msg.reply "#{reviewer.login} has been assigned for #{issue.html_url} as a reviewer"
         if ghWithAvatar
-          # hipchat needs image-ish url to display inline image
-          msg.send "#{reviewer.avatar_url}".replace(/(#.*|$)/, '#.png')
+          url = reviewer.avatar_url
+          url = "#{url}?t=#{Date.now()}" # cache buster
+          url = url.replace(/(#.*|$)/, '#.png') # hipchat needs image-ish url to display inline image
+          msg.send url
 
         # update stats
         stats = (robot.brain.get STATS_KEY) or {}
