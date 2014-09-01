@@ -55,6 +55,10 @@ module.exports = (robot) ->
       HUBOT_GITHUB_REVIEWER_TEAM: #{ghReviwerTeam}
     """
 
+  robot.respond /reviewer reset stats/i, (msg) ->
+    robot.brain.set STATS_KEY, {}
+    msg.reply "Reset reviewer stats!"
+
   robot.respond /reviewer show stats$/i, (msg) ->
     stats = robot.brain.get STATS_KEY
     msgs = ["login, percentage, num assigned"]
