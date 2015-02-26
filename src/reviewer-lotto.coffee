@@ -24,6 +24,8 @@ module.exports = (robot) ->
   ghOrg         = process.env.HUBOT_GITHUB_ORG
   ghReviwerTeam = process.env.HUBOT_GITHUB_REVIEWER_TEAM
   ghWithAvatar  = process.env.HUBOT_GITHUB_WITH_AVATAR
+  normalMessage = process.env.HUBOT_REVIEWER_LOTTO_MESSAGE || "Please review this."
+  politeMessage = process.env.HUBOT_REVIEWER_LOTTO_POLITE_MESSAGE || "#{normalMessage} :bow::bow::bow::bow:"
   debug         = process.env.HUBOT_REVIEWER_LOTTO_DEBUG in ["1", "true"]
 
   STATS_KEY     = 'reviewer-lotto-stats'
@@ -120,7 +122,7 @@ module.exports = (robot) ->
       (ctx, cb) ->
         # post a comment
         {reviewer} = ctx
-        body = "@#{reviewer.login} please review this" + if polite then " :bow::bow::bow::bow:" else "."
+        body = "@#{reviewer.login} " + if polite then politeMessage else normalMessage
         params = _.extend { body }, prParams
         gh.issues.createComment params, (err, res) -> cb err, ctx
 
@@ -132,7 +134,6 @@ module.exports = (robot) ->
 
       (ctx, cb) ->
         {reviewer, issue} = ctx
-        messages = []
         msg.reply "#{reviewer.login} has been assigned for #{issue.html_url} as a reviewer"
         if ghWithAvatar
           url = reviewer.avatar_url
