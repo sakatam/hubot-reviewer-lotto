@@ -30,7 +30,10 @@ members of this organization are candidate reviewers.
       </tr>
       <tr>
           <th>`HUBOT_GITHUB_REVIEWER_TEAM`</th>
-          <td>required. the reviewer team id you created above.</td>
+          <td>
+            required. the reviewer **team id** you created above.<br>
+            just in case, here is [a nice tutorial on how to get it](http://fabian-kostadinov.github.io/2015/01/16/how-to-find-a-github-team-id/).
+          </td>
       </tr>
       <tr>
           <th>`HUBOT_GITHUB_WITH_AVATAR`</th>
