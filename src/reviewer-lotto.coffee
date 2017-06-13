@@ -77,7 +77,7 @@ module.exports = (robot) ->
     pr   = msg.match[2]
     polite = msg.match[3]?
     prParams =
-      user: ghOrg
+      owner: ghOrg
       repo: repo
       number: pr
 
@@ -131,10 +131,10 @@ module.exports = (robot) ->
         gh.issues.createComment params, (err, res) -> cb err, ctx
 
       (ctx, cb) ->
-        # change assignee
+        # change reviewers
         {reviewer} = ctx
-        params = _.extend { assignee: reviewer.login }, prParams
-        gh.issues.edit params, (err, res) -> cb err, ctx
+        params = _.extend { reviewers: [reviewer.login] }, prParams
+        gh.pullRequests.createReviewRequest params, (err, res) -> cb err, ctx
 
       (ctx, cb) ->
         {reviewer, issue} = ctx
