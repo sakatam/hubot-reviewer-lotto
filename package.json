@@ -16,7 +16,7 @@
   "dependencies": {
     "async": "~0.6.2",
     "coffee-script": "~1.7",
-    "github": "~0.1.15",
+    "github": "^8.2.1",
     "underscore": "~1.6.0",
     "weighted": "^0.2.2"
   },
