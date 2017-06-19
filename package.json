@@ -1,6 +1,6 @@
 {
   "name": "hubot-reviewer-lotto",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "author": "sakatam",
   "description": "A reviewer lottery script for Hubot",
   "keywords": [
